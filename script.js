@@ -34,7 +34,45 @@ document.querySelector("#student-form").addEventListener("submit", (e) => {
     if (firstName === "" || lastName === "" || rollNo === "") {
         showAlert("Please Fill All Fields", "danger");
     }
+    else {
+        if (selectedRow == null) {
+            const list = document.querySelector("#student-list");
+            const row = document.createElement('tr');
 
+            row.innerHTML = `
+            <td>${firstName}</td>
+            <td>${lastName}</td>
+            <td>${rollNo}</td>
+            <td>
+            <a href="#" class="btn btn-warning btn-sm edit">Edit</a>
+            <a href="#" class="btn btn-danger btn-sm delete">Delete</a>
+            `;
+            list.appendChild(row);
+            selectedRow = null;
+            showAlert('Student Added', 'success');
+
+        }
+        else {
+            selectedRow.children[0].textContent = firstName;
+            selectedRow.children[1].textContent = lastName;
+            selectedRow.children[2].textContent = rollNo;
+            selectedRow = null;
+            showAlert("Student Information Edited", "info")
+        }
+        clearFields();
+    }
+
+})
+
+// Edit Data
+document.querySelector("#student-list").addEventListener('click', (e) => {
+    target = e.target;
+    if (target.classList.contains('edit')) {
+        selectedRow = target.parentElement.parentElement;
+        document.querySelector("#firstName").value = selectedRow.children[0].textContent;
+        document.querySelector("#lastName").value = selectedRow.children[1].textContent;
+        document.querySelector("#rollNo").value = selectedRow.children[2].textContent;
+    }
 })
 
 // Delete Data
